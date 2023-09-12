@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% load tasks_tags %}
+
+{% block main %}
+	<div>
+		<form action="{% url 'todo:create_project' %}" method="POST">
+			{% csrf_token %}
+			{{ create_project_form.as_p }}
+			<input type="submit">
+		</form>
+		{% for project, project_form in projects_forms.items %}
+			<a href="{% url 'todo:project' project.pk %}">{{ project.title }}</a>
+			<div>
+				<form action="{% url 'todo:change_project' project.pk %}" method="POST">
+					{% csrf_token %}
+					{{ project_form.as_p }}
+					<input type="submit">
+				</form>
+			</div>
+		{% endfor %}
+	</div>
+	<h1>{{ project.title }}</h1>
+	<div class="messages">
+		{% for message in messages %}
+			<div class="alert border alert-light text-center" role="alert">
+			  {{message}}
+			</div>
+		{% endfor %}
+	</div>
+	{% if project.project_type == project_type.SECTIONS %}
+
+		<form action="{% url 'todo:create_task' %}" method="POST">
+			{% csrf_token %}
+			{{ create_form.as_p }}
+			<input type="submit">
+		</form>
+
+		<div class="row">
+			{% for section_obj, tasks_list in objects_list.items %}
+				<div class="col-md-4">
+					<h2>{{ section_obj.title }}</h2>
+					<div class="card">
+						{% get_from_dict section_forms section_obj.id as section_form %}
+						<form action="{% url 'todo:change_section' section_obj.id %}" method="POST">
+							{% csrf_token %}
+							{{ section_form.as_p }}
+							<input type="submit">
+						</form>
+						<button type="submit"><a href="{% url 'todo:delete_section' section_obj.id %}">Удалить</a></button>
+					</div>
+					{% for task in tasks_list %}
+
+						<div class="card">
+							<button type="submit"><a href="{% url 'todo:change_status' task.id %}">Выполнено</a></button>
+							<button type="submit"><a href="{% url 'todo:delete_task' task.id %}">Удалить</a></button>
+							<p><a href="{% url 'todo:change_task' task.id %}">{{ task.title }}</a></p>
+							<p>{{ task.description|safe }}</p>
+						</div>
+						<br>
+
+						<div class="card">
+							{% get_from_dict update_forms task.id as update_form %}
+							<form action="{% url 'todo:change_task' task.id %}" method="POST">
+								{% csrf_token %}
+								{{ update_form.as_p }}
+								<input type="submit">
+							</form>
+						</div>
+						<br>
+
+					{% endfor %}
+
+					{% get_from_dict create_forms section_obj.id as create_form_section %}
+					<form action="{% url 'todo:create_task' %}" method="POST">
+						{% csrf_token %}
+						{{ create_form_section.as_p }}
+						<input type="submit">
+					</form>
+				</div>
+			{% endfor %}
+			<div class="col-md-4">
+				<form action="{% url 'todo:create_section' %}" method="POST">
+					{% csrf_token %}
+					{{ create_section_form.as_p }}
+					<input type="submit">
+				</form>
+			</div>
+		</div>
+
+	{% elif project.project_type == project_type.LIST %}
+
+		<form action="{% url 'todo:create_task' %}" method="POST">
+			{% csrf_token %}
+			{{ create_form.as_p }}
+			<input type="submit">
+		</form>
+		{% for task in objects_list %}
+			<div class="card" style="width:20%;">
+				<button type="submit"><a href="{% url 'todo:change_status' task.id %}">Выполнено</a></button>
+				<p><a href="{% url 'todo:change_task' task.id %}">{{ task.title }}</a></p>
+				<p>{{ task.description|safe }}</p>
+			</div>
+			<div class="card">
+				{% get_from_dict update_forms task.id as update_form %}
+				
+				<form action="{% url 'todo:change_task' task.id %}" method="POST">
+					{% csrf_token %}
+					{{ update_form.as_p }}
+					<input type="submit">
+				</form>
+			</div>
+		{% endfor %}
+
+	{% endif %}
+	<script type="text/javascript">
+		data_projects = {{ json|safe }};
+		
+	</script>
+{% endblock %}

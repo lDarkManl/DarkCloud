@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block main %}
+	{% for task in tasks_list %}
+		<div class="card">
+			<button type="submit"><a href="{% url 'todo:change_status' task.id %}">Невыполнено</a></button>
+			<p>{{ task.title }}</p>
+			<p>{{ task.description }}</p>
+		</div>
+	{% endfor %}
+{% endblock %}

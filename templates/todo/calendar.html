@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load tasks_tags %}
+
+{% block main %}
+	<a href="{% url 'todo:prev_calendar' year month %}">Назад</a>
+	<a href="{% url 'todo:next_calendar' year month %}">Вперед</a>
+	<p>Год: {{ year }}</p>
+	<p>Месяц: {% get_from_dict months month %}</p>
+	<div style="width:50%;">
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th>Понедельник</th>
+					<th>Вторник</th>
+					<th>Среда</th>
+					<th>Четверг</th>
+					<th>Пятница</th>
+					<th>Суббота</th>
+					<th>Воскресенье</th>
+				</tr>
+			</thead>
+			<tbody>
+				
+			{% for week in calendar %}
+				<tr>
+
+					{% for day in week %}
+
+						<td class="{% if curr_day == day %}table-primary{% endif %}">
+						{% if day != 0 %} 
+							<a href="{% url 'todo:date' year month day %}">{{ day }}</a>
+						{% endif %}
+						</td>
+
+					{% endfor %}
+
+				</tr>
+			{% endfor %}	
+			</tbody>
+		</table>
+	</div>
+{% endblock %} 

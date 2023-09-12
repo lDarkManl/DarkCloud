@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% load notes_tags %}
+
+{% block main %}
+	<button class="btn btn-light border-secondary"><a href="{% url 'notes:create_note' %}">Добавить</a></button>
+	{% for note in notes_list %}
+		<div class="card" style="width: 18rem;">
+			<a href="{% url 'notes:change_note' note.id %}">{{ note.note_title }}</a>
+			<p>{{ note.note_text|safe|limit_length }}</p>
+			<p>{{ note.update_date|date }}</p>
+		</div>
+	{% endfor %}
+{% endblock %}
