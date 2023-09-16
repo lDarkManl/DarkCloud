@@ -62,7 +62,9 @@
 							{% get_from_dict update_forms task.id as update_form %}
 							<form action="{% url 'todo:change_task' task.id %}" method="POST">
 								{% csrf_token %}
+								
 								{{ update_form.as_p }}
+								
 								<input type="submit">
 							</form>
 						</div>
@@ -105,6 +107,7 @@
 				
 				<form action="{% url 'todo:change_task' task.id %}" method="POST">
 					{% csrf_token %}
+
 					{{ update_form.as_p }}
 					<input type="submit">
 				</form>
@@ -112,8 +115,5 @@
 		{% endfor %}
 
 	{% endif %}
-	<script type="text/javascript">
-		data_projects = {{ json|safe }};
-		
-	</script>
+	
 {% endblock %}

@@ -3,6 +3,8 @@ from django.db import models
 from django.shortcuts import reverse
 from django.utils import timezone
 from django.core.exceptions import ValidationError
+from smart_selects.db_fields import ChainedForeignKey
+
 
 class Task(models.Model):
 	'''Модель задачи'''
@@ -10,7 +12,14 @@ class Task(models.Model):
 	title = models.CharField('Название задачи', max_length=255)
 	description = models.TextField('Описание', blank=True)
 	completed = models.BooleanField('Статус', default=False)
-	section = models.ForeignKey('Section', on_delete=models.CASCADE, verbose_name='Секция', related_name='section_task', null=True, blank=True)
+	section = ChainedForeignKey('Section',
+        chained_field="project",
+        chained_model_field="project",
+        show_all=False,
+        auto_choose=False,
+        sort=False,
+        null=True
+   	)
 	project = models.ForeignKey('Project', on_delete=models.CASCADE, verbose_name='Проект', related_name='project_task')
 	pub_date = models.DateTimeField('Дата публикации', auto_now_add=True)
 	update_date = models.DateTimeField('Дата обновления', auto_now=True)

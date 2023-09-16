@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'cloud',
     'sizefield',
     'notes',
-    'todo'
+    'todo',
+    'smart_selects',
 ]
 
 MIDDLEWARE = [

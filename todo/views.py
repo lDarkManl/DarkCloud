@@ -54,7 +54,6 @@ def project_view(request, pk):
 	objects_list = tasks
 
 	context = {}
-	context['json'] = json.dumps({'1': 2, '2': [1, 2, 3]})
 	context.update(services.get_tasks_forms_context(tasks, TaskForm, {'project': project}))
 	context['objects_list'] = objects_list
 	
