@@ -60,5 +60,3 @@ class AllCards(ListView):
 	template_name = 'cards/all_cards.html'
 	context_object_name = 'cards_list'
 	
-class ChooseCards(ListView):
-	pass
