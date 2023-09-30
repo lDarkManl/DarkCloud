@@ -8,6 +8,7 @@ urlpatterns = [
     path('cloud/', include(('cloud.urls'), namespace='cloud')),
     path('notes/', include(('notes.urls'), namespace='notes')),
     path('todo/', include(('todo.urls'), namespace='todo')),
+    path('cards/', include(('cards.urls'), namespace='cards')),
     path('chaining/', include('smart_selects.urls')),
 ]
 

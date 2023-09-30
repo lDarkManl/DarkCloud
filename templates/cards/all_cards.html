@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block main %}
+	<button class="btn btn-light border-secondary"><a href="{% url 'cards:index_folders' %}">Назад</a></button>
+	<a href="{% url 'cards:create_card' %}">Создать карточку</a>
+	{% for card in cards_list %}
+		<div><a href="{% url 'cards:delete_card' card.id %}">Удалить карточку</a></div>
+		<div class="card" style="width: 18rem;"><a href="{% url 'cards:change_card' card.id %}">{{ card.front }} - {{ card.back }}</a></div>
+	{% endfor %}
+
+{% endblock %}

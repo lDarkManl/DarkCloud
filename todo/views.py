@@ -60,6 +60,7 @@ def project_view(request, pk):
 	if project.project_type == Project.SECTIONS:
 		result = services.make_project_sections(tasks, project)
 		context.update(result)
+		
 	context['create_section_form'] = create_section_form
 	context['project'] = project
 	context['project_type'] = {

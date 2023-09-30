@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+
+{% block main %}
+	<button class="btn btn-light border-secondary"><a href="{% url 'cards:create_folder' %}">Создать</a></button>
+	{% for folder in folders_list %}
+		<button class="btn btn-light border-secondary"><a href="{% url 'cards:delete_folder' folder.id %}">Удалить</a></button>
+		<button class="btn btn-light border-secondary"><a href="{% url 'cards:change_folder' folder.id %}">Изменить</a></button>
+		<div class="card" style="width: 18rem;">
+			<a href="{% url 'cards:folder' folder.id %}">{{ folder.title }}</a>
+		</div>
+	{% endfor %}
+{% endblock %}

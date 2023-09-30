@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block main %}
+	<button class="btn btn-light border-secondary"><a href="{% url 'cards:index_folders' %}">Назад</a></button>
+	<form method="post">
+		{% csrf_token %}
+	    <input type="submit" value="Удалить">
+	</form>
+	
+{% endblock %}
