@@ -1,21 +1,9 @@
 from django.db import models
-from django.shortcuts import reverse
-
-class Card(models.Model):
-	front = models.CharField(max_length=255)
-	back = models.CharField(max_length=255)
-	pub_date = models.DateTimeField('Дата публикации', auto_now_add=True)
-	folder = models.ForeignKey('Folder', on_delete=models.CASCADE, verbose_name='Папка', related_name='card')
-
-	def __str__(self):
-		return self.front
-
-	class Meta:
-		verbose_name = 'Карточка'
-		verbose_name_plural = 'Карточки'		
+from django.shortcuts import reverse		
 
 class Folder(models.Model):
 	title = models.CharField(max_length=255)
+	# cards = models.FileField(upload_to='uploads/')
 	pub_date = models.DateTimeField('Дата публикации', auto_now_add=True)
 
 	def __str__(self):
