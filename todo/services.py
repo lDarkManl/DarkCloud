@@ -66,15 +66,15 @@ def delete_obj(request, model_class, pk):
 	obj = get_object_or_404(model_class, pk=pk)
 	obj.delete()
 
-def get_head_context(request):
+def get_head_context(request, project):
 	'''Получить контекст для head в приложении todo'''
 	context = {}
 	projects_list = Project.objects.all()
 	context['create_project_form'] = ProjectCreateForm()
-	context['projects_forms'] = {project:ProjectUpdateForm(instance=project) for project in projects_list}
+	context['project_form'] = ProjectUpdateForm(instance=project)
 	return context
 
-def get_tasks_forms_context(tasks_list, form_class, initial):
+def get_tasks_forms_context(tasks_list, form_class, initial=None):
 	'''Создать формы для изменения и добавления задачи 
 	и добавить их в контекст'''
 	context = {}

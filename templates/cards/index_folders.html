@@ -3,11 +3,18 @@
 
 {% block main %}
 	<button class="btn btn-light border-secondary"><a href="{% url 'cards:create_folder' %}">Создать</a></button>
+	<button class="btn btn-light border-secondary"><a href="{% url 'cards:import_folder' %}">Импортировать</a></button>
+	<div class="folders">
 	{% for folder in folders_list %}
-		<button class="btn btn-light border-secondary"><a href="{% url 'cards:delete_folder' folder.id %}">Удалить</a></button>
-		<button class="btn btn-light border-secondary"><a href="{% url 'cards:change_folder' folder.id %}">Изменить</a></button>
-		<div class="card" style="width: 18rem;">
-			<a href="{% url 'cards:folder' folder.id %}">{{ folder.title }}</a>
+		<div class="folder d-flex mt-3">
+			<div class="card text-center w-25 fs-5">
+				<a href="{% url 'cards:folder' folder.id %}">{{ folder.title }}</a>
+			</div>
+			<div>
+				<button class="btn btn-light border-secondary"><a href="{% url 'cards:delete_folder' folder.id %}">Удалить</a></button>
+				<button class="btn btn-light border-secondary"><a href="{% url 'cards:change_folder' folder.id %}">Изменить</a></button>
+			</div>
 		</div>
 	{% endfor %}
+	</div>
 {% endblock %}

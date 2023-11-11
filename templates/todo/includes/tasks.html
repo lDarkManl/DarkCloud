@@ -1,0 +1,14 @@
+{% for task in tasks_list %}
+	<div class="card mt-3">
+		<div class="w-25 d-flex justify-content-start">
+			<button class="btn btn-primary" type="submit"><a class="text-light" href="{% url 'todo:change_status' task.id %}">Выполнено</a></button>
+			<button class="btn btn-primary ms-1" type="submit"><a class="text-light" href="{% url 'todo:delete_task' task.id %}">Удалить</a></button>
+			<button class="btn btn-primary ms-1" data-bs-toggle="modal" data-bs-target="#changeTask{{ task.id }}">Изменить</button>
+		</div>
+		<p>{{ task.title }}</p>
+		<p>{{ task.description|safe }}</p>
+		{% if task.time %}<p>{{ task.time }}</p>{% endif %}
+		{% if task.date %}<p>{{ task.date }}</p>{% endif %}
+	</div>
+	{% include 'todo/includes/update_form.html' with task=task update_forms=update_forms %}
+{% endfor %}

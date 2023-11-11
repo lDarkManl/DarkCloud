@@ -18,7 +18,8 @@ class Task(models.Model):
         show_all=False,
         auto_choose=False,
         sort=False,
-        null=True
+        null=True,
+        blank=True
    	)
 	project = models.ForeignKey('Project', on_delete=models.CASCADE, verbose_name='Проект', related_name='project_task')
 	pub_date = models.DateTimeField('Дата публикации', auto_now_add=True)

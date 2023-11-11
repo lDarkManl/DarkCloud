@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block main %}
+	<button class="btn btn-light border-secondary"><a href="{% url 'cards:index_folders' %}">Назад</a></button>
+	<button class="btn btn-light border-secondary"><a href="{% url 'cards:change_cards' id %}">Изменить карточки</a></button>
+	<button class="btn btn-light border-secondary" onclick="changeOrderOnRandom();">Перемешать</button>
+	<button class="btn btn-light border-secondary"><a href="{% url 'cards:export_folder' id %}">Экспортировать</a></button>
+	<button class="btn btn-light border-secondary" onclick="makeCheckboxes();">Переместить в новую папку</button>
+
+	<div class="head-cards">
+		{% for card in cards_list %}
+			<div class="card btn border border-secondary text-light mt-3 fs-5">
+				<div class="card-front" onclick="changeCard(this);">{{ card.0 }}</div>
+				<div class="span-back" style="display:none;">{{ card.1 }}</div>
+			</div>
+		{% endfor %}
+	</div>
+	<form action="{% url 'cards:choose_cards' %}" method="POST">
+		{% csrf_token %}
+		<div class='title' style='display:none;'>{{ form.as_p }}</div>
+		<div class="form-cards"></div>
+	</form>
+	<script src="{% static 'script.js' %}"></script>
+	<style>
+		.head-cards{
+			margin-left: 30px;
+			width: 25%;
+		}
+		.card{
+			padding: 0 !important; 
+		}
+		.center{
+			width: 25%;
+			margin: 0 auto;
+		}
+		.card-front{
+			background-color: #0250f7;
+		}
+		.card-back{
+			background-color: #42e03f;
+		} 
+		@media (max-width: 1000px) {
+			.head-cards{
+				text-align: center;
+				width: 50%;
+				margin: 0 auto;
+			}
+		}
+		@media (max-width: 500px) {
+			.head-cards{
+				width: 70%;
+			}
+		}
+	</style>
+{% endblock %}

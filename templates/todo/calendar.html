@@ -1,9 +1,9 @@
-{% extends 'base.html' %}
+{% extends 'todo/base-todo.html' %}
 {% load tasks_tags %}
 
-{% block main %}
-	<a href="{% url 'todo:prev_calendar' year month %}">Назад</a>
-	<a href="{% url 'todo:next_calendar' year month %}">Вперед</a>
+{% block content %}
+	<button class="btn btn-primary"><a class="text-light" href="{% url 'todo:prev_calendar' year month %}">Назад</a></button>
+	<button class="btn btn-primary"><a class="text-light" href="{% url 'todo:next_calendar' year month %}">Вперед</a></button>
 	<p>Год: {{ year }}</p>
 	<p>Месяц: {% get_from_dict months month %}</p>
 	<div style="width:50%;">

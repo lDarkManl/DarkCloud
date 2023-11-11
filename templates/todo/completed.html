@@ -1,11 +1,14 @@
-{% extends 'base.html' %}
+{% extends 'todo/base-todo.html' %}
 
-{% block main %}
+{% block content %}
 	{% for task in tasks_list %}
-		<div class="card">
-			<button type="submit"><a href="{% url 'todo:change_status' task.id %}">Невыполнено</a></button>
-			<p>{{ task.title }}</p>
-			<p>{{ task.description }}</p>
+		<div class="card mt-3">
+		<div class="w-25 d-flex justify-content-start">
+			<button class="btn btn-primary" type="submit"><a class="text-light" href="{% url 'todo:change_status' task.id %}">Невыполнено</a></button>
+			<button class="btn btn-primary ms-1" type="submit"><a class="text-light" href="{% url 'todo:delete_task' task.id %}">Удалить</a></button>
 		</div>
+		<p>{{ task.title }}</p>
+		<p>{{ task.description|safe }}</p>
+	</div>
 	{% endfor %}
 {% endblock %}

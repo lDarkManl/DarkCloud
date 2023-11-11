@@ -28,16 +28,16 @@ def create_or_update_section(request, pk=None):
 	return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 def delete_project(request, pk):
-	lete_obj(request, Project, pk)
-	return HttpResponseRedirect(request.META['HTTP_REFERER'])
+	services.delete_obj(request, Project, pk)
+	return HttpResponseRedirect(reverse('todo:today'))
 
 def delete_section(request, pk):
-	lete_obj(request, Section, pk)
-	return HttpResponseRedirect(request.META['HTTP_REFERER'])
+	services.delete_obj(request, Section, pk)
+	return HttpResponseRedirect(reverse('todo:today'))
 
 def delete_task(request, pk):
-	lete_obj(request, Task, pk)
-	return HttpResponseRedirect(request.META['HTTP_REFERER'])
+	services.delete_obj(request, Task, pk)
+	return HttpResponseRedirect(reverse('todo:today'))
 
 def change_status_task(request, pk):
 	'''Изменить статус задачи'''
@@ -67,7 +67,7 @@ def project_view(request, pk):
 		'LIST': Project.LIST,
 		'SECTIONS': Project.SECTIONS
 	}
-	context.update(services.get_head_context(request))
+	context.update(services.get_head_context(request, project))
 	return render(request, 'todo/project.html', context)
 	
 def today_view(request):
@@ -83,7 +83,10 @@ def all_view(request):
 
 def completed(request):
 	tasks_list = Task.objects.filter(completed=True).order_by('pub_date')
-	return render(request, 'todo/completed.html', {'tasks_list': tasks_list})
+	context = {}
+	context['tasks_list'] = tasks_list
+	context.update(services.get_tasks_forms_context(tasks_list, TaskForm))
+	return render(request, 'todo/completed.html', context)
 
 def date_view(request, year, month, day):
 	formatted_date = date(year, month, day)

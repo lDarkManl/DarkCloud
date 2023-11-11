@@ -1,9 +1,11 @@
+import os
 from django.db import models
-from django.shortcuts import reverse		
+from django.shortcuts import reverse	
+from django.core.files.base import ContentFile	
 
 class Folder(models.Model):
-	title = models.CharField(max_length=255)
-	# cards = models.FileField(upload_to='uploads/')
+	title = models.CharField('Название папки', max_length=255)
+	cards = models.FileField('Карточки', upload_to='uploads/', blank=True)
 	pub_date = models.DateTimeField('Дата публикации', auto_now_add=True)
 
 	def __str__(self):
@@ -15,4 +17,12 @@ class Folder(models.Model):
 	
 	class Meta:
 		verbose_name = 'Папка'
-		verbose_name_plural = 'Папки'		
+		verbose_name_plural = 'Папки'	
+
+	def save(self, *args, **kwargs):
+		super().save(*args, **kwargs)
+		
+
+	def delete(self, *args, **kwargs):
+		os.remove(self.cards.path)
+		super().delete(*args, **kwargs)

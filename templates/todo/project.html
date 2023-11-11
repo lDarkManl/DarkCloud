@@ -1,119 +1,65 @@
-{% extends 'base.html' %}
+{% extends 'todo/base-todo.html' %}
 {% load tasks_tags %}
 
-{% block main %}
-	<div>
-		<form action="{% url 'todo:create_project' %}" method="POST">
-			{% csrf_token %}
-			{{ create_project_form.as_p }}
-			<input type="submit">
-		</form>
-		{% for project, project_form in projects_forms.items %}
-			<a href="{% url 'todo:project' project.pk %}">{{ project.title }}</a>
-			<div>
-				<form action="{% url 'todo:change_project' project.pk %}" method="POST">
-					{% csrf_token %}
-					{{ project_form.as_p }}
-					<input type="submit">
-				</form>
-			</div>
-		{% endfor %}
-	</div>
-	<h1>{{ project.title }}</h1>
+{% block content %}
 	<div class="messages">
 		{% for message in messages %}
 			<div class="alert border alert-light text-center" role="alert">
-			  {{message}}
+			  {{ message }}
 			</div>
 		{% endfor %}
 	</div>
+	<div>
+		<div>
+			<button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#changeProject">Изменить проект</button>
+			<button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#createProject">Создать проект</button>
+			<button class="btn btn-dark"><a class="text-light" href="{% url 'todo:delete_project' project.id %}">Удалить проект</a></button>
+		</div>
+		<div>
+			{% include 'todo/includes/create_project.html' with create_project_form=create_project_form %}
+		</div>
+		<div>
+			{% include 'todo/includes/update_project.html' with project_form=project_form %}
+		</div>
+	</div>
+	<h1>{{ project.title }}</h1>
+	<p>{{ project.description }}</p>
 	{% if project.project_type == project_type.SECTIONS %}
-
-		<form action="{% url 'todo:create_task' %}" method="POST">
-			{% csrf_token %}
-			{{ create_form.as_p }}
-			<input type="submit">
-		</form>
 
 		<div class="row">
 			{% for section_obj, tasks_list in objects_list.items %}
-				<div class="col-md-4">
-					<h2>{{ section_obj.title }}</h2>
-					<div class="card">
+				<div class="col-md-4 mt-2 border">
+					<div>
+						<h2>{{ section_obj.title }}</h2>
 						{% get_from_dict section_forms section_obj.id as section_form %}
-						<form action="{% url 'todo:change_section' section_obj.id %}" method="POST">
-							{% csrf_token %}
-							{{ section_form.as_p }}
-							<input type="submit">
-						</form>
-						<button type="submit"><a href="{% url 'todo:delete_section' section_obj.id %}">Удалить</a></button>
+						<button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#changeSection">Изменить</button>
+						<button class="btn btn-dark" type="submit"><a class="text-light" href="{% url 'todo:delete_section' section_obj.id %}">Удалить</a></button>
+						{% include 'todo/includes/update_section.html' with section_form=section_form %}
 					</div>
-					{% for task in tasks_list %}
-
-						<div class="card">
-							<button type="submit"><a href="{% url 'todo:change_status' task.id %}">Выполнено</a></button>
-							<button type="submit"><a href="{% url 'todo:delete_task' task.id %}">Удалить</a></button>
-							<p><a href="{% url 'todo:change_task' task.id %}">{{ task.title }}</a></p>
-							<p>{{ task.description|safe }}</p>
-						</div>
-						<br>
-
-						<div class="card">
-							{% get_from_dict update_forms task.id as update_form %}
-							<form action="{% url 'todo:change_task' task.id %}" method="POST">
-								{% csrf_token %}
-								
-								{{ update_form.as_p }}
-								
-								<input type="submit">
-							</form>
-						</div>
-						<br>
-
-					{% endfor %}
-
-					{% get_from_dict create_forms section_obj.id as create_form_section %}
-					<form action="{% url 'todo:create_task' %}" method="POST">
-						{% csrf_token %}
-						{{ create_form_section.as_p }}
-						<input type="submit">
-					</form>
+					<div class="tasks">
+						{% include 'todo/includes/tasks.html' with tasks_list=tasks_list update_forms=update_forms %}
+					</div>
+					
+					<div class="create_task">
+						{% get_from_dict create_forms section_obj.id as create_form %}
+						<button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#createTaskSection">Создать задачу</button>
+						{% include 'todo/includes/create_task.html' with create_form=create_form %}
+					</div>
 				</div>
 			{% endfor %}
 			<div class="col-md-4">
-				<form action="{% url 'todo:create_section' %}" method="POST">
-					{% csrf_token %}
-					{{ create_section_form.as_p }}
-					<input type="submit">
-				</form>
+				<button class="btn btn-dark mt-3" data-bs-toggle="modal" data-bs-target="#createSection">Создать секцию</button>
+				{% include 'todo/includes/create_section.html' with create_form=create_section_form %}
 			</div>
 		</div>
 
 	{% elif project.project_type == project_type.LIST %}
-
-		<form action="{% url 'todo:create_task' %}" method="POST">
-			{% csrf_token %}
-			{{ create_form.as_p }}
-			<input type="submit">
-		</form>
-		{% for task in objects_list %}
-			<div class="card" style="width:20%;">
-				<button type="submit"><a href="{% url 'todo:change_status' task.id %}">Выполнено</a></button>
-				<p><a href="{% url 'todo:change_task' task.id %}">{{ task.title }}</a></p>
-				<p>{{ task.description|safe }}</p>
-			</div>
-			<div class="card">
-				{% get_from_dict update_forms task.id as update_form %}
-				
-				<form action="{% url 'todo:change_task' task.id %}" method="POST">
-					{% csrf_token %}
-
-					{{ update_form.as_p }}
-					<input type="submit">
-				</form>
-			</div>
-		{% endfor %}
-
+		<div class="tasks">
+			{% include 'todo/includes/tasks.html' with tasks_list=objects_list update_forms=update_forms %}
+		</div>
+		<div class="create_task">
+			<button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#createTaskSection">Создать задачу</button>
+			{% include 'todo/includes/create_task.html' with create_form=create_form %}
+		</div>
 	{% endif %}
-	
 {% endblock %}

@@ -1,27 +1,9 @@
-{% extends 'base.html' %}
+{% extends 'todo/base-todo.html' %}
 {% load tasks_tags %}
 
-{% block main %}
-	<form action="{% url 'todo:create_task' %}" method="POST">
-			{% csrf_token %}
-			{{ create_form.as_p }}
-			<input type="submit">
-		</form>
-		{% for task in tasks_list %}
-			<div class="card" style="width:20%;">
-				<button type="submit"><a href="{% url 'todo:change_status' task.id %}">Выполнено</a></button>
-				<p><a href="{% url 'todo:change_task' task.id %}">{{ task.title }}</a></p>
-				<p>{{ task.description|safe }}</p>
-			</div>
-			<div class="card">
-				{% get_from_dict update_forms task.id as update_form %}
-				
-				<form action="{% url 'todo:change_task' task.id %}" method="POST">
-					{% csrf_token %}
-					{{ update_form.as_p }}
-					<input type="submit">
-				</form>
-			</div>
-		{% endfor %}
+{% block content %}
+
+	{% include 'todo/includes/create_task.html' with create_form=create_form %}
+	{% include 'todo/includes/tasks.html' with tasks_list=tasks_list update_forms=update_forms %}	
 
 {% endblock %}

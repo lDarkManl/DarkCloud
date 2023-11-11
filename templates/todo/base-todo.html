@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% load tasks_tags %}
+
+{% block main %}
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-2 border">
+				{% get_projects as projects_list %}
+				{% include 'todo/includes/todo-nav.html' with projects_list=projects_list %}
+			</div>
+			<div class="col-md-10 border">
+				{% block content %}{% endblock %}
+			</div>
+		</div>
+	</div>
+{% endblock %}

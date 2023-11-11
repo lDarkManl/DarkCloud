@@ -1,0 +1,21 @@
+{% load tasks_tags %}
+
+<div class="modal fade" id="changeTask{{ task.id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="changeTaskLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+		<div class="modal-header">
+		  <h1 class="modal-title fs-5" id="changeTaskLabel">Изменить задачу</h1>
+		  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		</div>
+		<div class="modal-body">
+			{% get_from_dict update_forms task.id as update_form %}
+			<form action="{% url 'todo:change_task' task.id %}" method="POST">
+				{% csrf_token %}
+				{{ update_form.media.js }}
+				{{ update_form.as_p }}
+				<input type="submit">
+			</form>
+		</div>
+    </div>
+  </div>
+</div>
