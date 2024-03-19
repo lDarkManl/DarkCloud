@@ -1,6 +1,6 @@
 from django import template
 from todo.models import Project
-from todo.forms import TaskForm
+from todo.forms import TaskForm, ProjectCreateForm
 
 register = template.Library()
 
@@ -15,4 +15,8 @@ def get_projects():
 @register.simple_tag()
 def get_create_task_form():
 	return TaskForm()
+
+@register.simple_tag()
+def get_create_project_form():
+	return ProjectCreateForm()
 

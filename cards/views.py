@@ -43,12 +43,14 @@ class CreateFolder(CreateView):
 
 
 class ImportFolder(CreateView):
+	'''Импортировать папку'''
 	model = Folder
 	template_name = 'cards/import_folder.html'
 	form_class = ImportFolderForm
 	success_url = reverse_lazy('cards:index_folders')
 
 def folder(request, pk):
+	'''Вывести содержимое папки'''
 	folder = get_object_or_404(Folder, pk=pk)
 	cards_list = services.get_cards_from_folder(folder)
 	form = FolderForm
@@ -60,6 +62,7 @@ def folder(request, pk):
 	return render(request, 'cards/folder.html', context)
 
 def change_cards(request, pk):
+	'''View для изменения карточек'''
 	if request.method == 'POST':
 		return change_cards_post(request, pk)
 	else:
@@ -71,7 +74,6 @@ def change_cards_post(request, pk):
 	cards_list = services.serialize_cards(form, folder)
 	services.write_cards_in_folder(cards_list, folder)
 	return HttpResponseRedirect(reverse('cards:folder', args=[folder.id]))
-
 
 def change_cards_get(request, pk):
 	folder = get_object_or_404(Folder, pk=pk)
@@ -85,12 +87,14 @@ def change_cards_get(request, pk):
 	return render(request, 'cards/change_cards.html', context)
 
 def export_folder(request, pk):
+	'''Экспортировать папку'''
 	folder = get_object_or_404(Folder, pk=pk)
 	filename = folder.cards.path
 	response = FileResponse(open(filename, 'rb'))
 	return response
 
 def choose_cards(request):
+	'''Выбрать карточки и создать отдельную папку с ними'''
 	if request.method == 'POST':
 		cards_list = request.POST.getlist('card')
 		title = request.POST['title']

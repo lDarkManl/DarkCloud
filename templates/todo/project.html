@@ -41,9 +41,9 @@
 					</div>
 					
 					<div class="create_task">
-						{% get_from_dict create_forms section_obj.id as create_form %}
+						{% get_from_dict create_forms section_obj.id as create_form_section %}
 						<button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#createTaskSection">Создать задачу</button>
-						{% include 'todo/includes/create_task.html' with create_form=create_form %}
+						{% include 'todo/includes/create_task.html' with create_form=create_form_section %}
 					</div>
 				</div>
 			{% endfor %}

@@ -9,7 +9,6 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('login/', views.user_login, name='login'),
     path('logout/', views.user_logout, name='logout'),
-    path('cloud/', include(('cloud.urls'), namespace='cloud')),
     path('notes/', include(('notes.urls'), namespace='notes')),
     path('todo/', include(('todo.urls'), namespace='todo')),
     path('cards/', include(('cards.urls'), namespace='cards')),

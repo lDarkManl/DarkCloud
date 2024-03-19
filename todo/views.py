@@ -47,6 +47,7 @@ def change_status_task(request, pk):
 	return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 def project_view(request, pk):
+	'''View для действий с проектом'''
 	tasks = Task.objects.filter(project_id=pk, completed=False).order_by('pub_date').select_related('project')
 	project = Project.objects.get(id=pk)
 
@@ -60,7 +61,6 @@ def project_view(request, pk):
 	if project.project_type == Project.SECTIONS:
 		result = services.make_project_sections(tasks, project)
 		context.update(result)
-		
 	context['create_section_form'] = create_section_form
 	context['project'] = project
 	context['project_type'] = {
@@ -117,6 +117,7 @@ def calendar(request):
 	return HttpResponseRedirect(reverse('todo:calendar_main', args=(year, month)))
 
 def calendar_main(request, year, month):
+	'''Работа с календарем'''
 	day = None
 	today = date.today()
 	if month == today.month and year == today.year:
